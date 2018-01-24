@@ -25,6 +25,11 @@ numLevel = 2;
 %                                                                              %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 D = 0;
+H1=Histogram(I1,nbins);
+H2=Histogram(I2,nbins);
+H=[H1 ;H2];
+D0=sum(min(H,[],1));
+D = D0/(2.^numLevel);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                              %
 %                               END OF YOUR CODE                               %
@@ -40,13 +45,13 @@ for l = 1 : numLevel,
 %                           along x and y directions.                          %
 %                                                                              %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    numCells = 0;
+    numCells = 2.^numLevel;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                              %
 %                               END OF YOUR CODE                               %
 %                                                                              %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+    D = 0;
     for i = 1 : numCells,
         for j = 1 : numCells,
             
@@ -61,6 +66,11 @@ for l = 1 : numLevel,
             x_hi1 = 0;
             y_lo1 = 0;
             y_hi1 = 0;
+            I1size = size(I1);
+            x_lo1 = floor((j-1)*I1size(2)/numCells)+1;
+            x_hi1 = floor(j*I1size(2)/numCells);
+            y_lo1 = floor((i-1)*I1size(1)/numCells)+1;
+            y_hi1 = floor(i*I1size(1)/numCells);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                              %
 %                               END OF YOUR CODE                               %
@@ -78,6 +88,11 @@ for l = 1 : numLevel,
             x_hi2 = 0;
             y_lo2 = 0;
             y_hi2 = 0;
+            I2size = size(I2);
+            x_lo2 = floor((j-1)*I2size(2)/numCells)+1;
+            x_hi2 = floor(j*I2size(2)/numCells);
+            y_lo2 = floor((i-1)*I2size(1)/numCells)+1;
+            y_hi2 = floor(i*I2size(1)/numCells);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                              %
 %                               END OF YOUR CODE                               %
@@ -91,7 +106,14 @@ for l = 1 : numLevel,
 %You should increment D by the weighted distances between patches in this cell.%
 %                                                                              %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            D = 0;
+            
+            I1_patch=I1(y_lo1:y_hi1,x_lo1:x_hi1);
+            I2_patch=I2(y_lo2:y_hi2,x_lo2:x_hi2);
+            H1 = Histogram(I1_patch, nbins);
+            H2 = Histogram(I2_patch, nbins);
+            H=[H1 ;H2];
+            D_patch =sum(min(H,[],1));  
+            D = D+D_patch/(2.^(numLevel-l+1)); 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                              %
 %                               END OF YOUR CODE                               %

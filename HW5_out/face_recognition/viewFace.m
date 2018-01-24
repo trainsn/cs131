@@ -6,6 +6,7 @@ function viewFace( faceColumn, imgHeight)
 %   imgHeight - the height of the original image. (The width is figured out
 %   using the size of the unrolled column.)
 
+    figure;
     imshow(reshape(faceColumn,imgHeight, []),[0 255]);
 end
 

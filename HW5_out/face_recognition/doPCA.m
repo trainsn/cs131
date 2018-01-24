@@ -28,7 +28,11 @@ function [prinComponents, weightCols] = doPCA(A, numComponentsToKeep)
     % discussed above. 
     weightCols = zeros(numComponentsToKeep, size(A,2));
     prinComponents = zeros(size(A,1), numComponentsToKeep);
-    
+    [U, S, V] = svd(A,'econ');
+    prinComponents = U(:,1:numComponentsToKeep);
+    sig = S(1:numComponentsToKeep, 1:numComponentsToKeep);
+    V = V';
+    weightCols = sig*V(1:numComponentsToKeep,:); 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %                                                                     %
     %                            END YOUR CODE                            %

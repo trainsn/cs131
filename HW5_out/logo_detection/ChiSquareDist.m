@@ -18,7 +18,14 @@ function D = ChiSquareDist( I1, I2, nbins )
 	
 	D = 0;
     % YOUR CODE STARTS HERE
-    
-    % YOUR CODE ENDS HERE
+    H1=Histogram(I1,nbins);
+    H2=Histogram(I2,nbins);
+    H=[H1 ;H2];
+    sumH=sum(H,1);
+    subH=(H1-H2).^2;
+    ind=sumH==0;
+    ind=~ind;
+    D=sum(subH(ind)./sumH(ind));
+    %   CODE ENDS HERE
 end
 
